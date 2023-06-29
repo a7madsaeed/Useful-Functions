@@ -1,0 +1,32 @@
+public static boolean isValidBirthday(String birthday) {
+        DateTimeFormatter[] dateFormatters = {DateTimeFormatter.ofPattern("MM/dd/yyyy"),
+                DateTimeFormatter.ofPattern("M/dd/yyyy"),
+                DateTimeFormatter.ofPattern("M/d/yyyy"),
+                DateTimeFormatter.ofPattern("MM/d/yyyy"),
+                DateTimeFormatter.ofPattern("M/dd/yyyy"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                DateTimeFormatter.ofPattern("dd/M/yyyy"),
+                DateTimeFormatter.ofPattern("d/M/yyyy"),
+                DateTimeFormatter.ofPattern("yyyy/MM/dd"),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+                // Add more formats as needed
+        };
+
+        for (DateTimeFormatter dateFormatter : dateFormatters) {
+            try {
+                // Parse the birthday string into a LocalDate object
+                LocalDate parsedDate = LocalDate.parse(birthday, dateFormatter);
+
+                // Check if the parsed date is not in the future
+                LocalDate minDate = LocalDate.of(1920, 1, 1);
+                LocalDate currentDate = LocalDate.now();
+                return !parsedDate.isAfter(currentDate) && !parsedDate.isBefore(minDate);
+            } catch (DateTimeParseException e) {
+                // The birthday string is not in the current format, try the next one
+            }
+        }
+
+        // No valid format matched, return false
+        return false;
+
+    }
